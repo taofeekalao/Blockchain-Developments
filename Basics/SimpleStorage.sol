@@ -8,6 +8,10 @@ contract SimpleStorage{
     // This gets initialised to 0.
     uint256 favouriteNumber;
 
+    // Introducing Mapping Data Structure
+    mapping(string => uint256) public nameToFavouriteNumber;
+
+
     struct People {
         uint256 favouriteNumber;
         string name;
@@ -37,5 +41,6 @@ contract SimpleStorage{
         //People memory newPerson = People(_favouriteNumber, _name);
         // people.push(newPerson)
         people.push(People({favouriteNumber: _favouriteNumber, name: _name}));
+        nameToFavouriteNumber[_name] = _favouriteNumber;
     }
 }
