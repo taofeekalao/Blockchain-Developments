@@ -40,4 +40,14 @@ contract FundMe {
             revert NotOwner();
         _;
     }
+
+    // Introducing Fallback & Receive Functions In Case Someone
+    // Calls Our Contract Without Specifying Function Correctly.
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
+    }
 }
