@@ -1,20 +1,26 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 import "./PriceConverter.sol";
+
+// Custome errors ~ saving gas
+error NotOwner();
 
 contract FundMe {
 // 931,607
 // 954,067
+// 814,771
 
     using PriceConverter for uint256;
     // constant and immutable variable saving gas
     // stored in contract's byte code instead of storage
-    
+
     uint256 public constant MINIMUM_USD = 50 * 1e18; // 1 * 10 ** 18
+
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunders;
+
     address public immutable i_owner;
 
     constructor() {
@@ -45,11 +51,16 @@ contract FundMe {
         // (bool callSuccess, bytes memory dataReturned) = payable(msg.sender).call{value: address(this).balance}("");
 
         (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
-        require(callSuccess, "Call failed!");   
+        require(callSuccess, "Call failed!");
+        
     }
 
     modifier onlyOwner {
         require(msg.sender == i_owner, "Sender is not the owner!");
+        if(msg.sender != i_owner) {
+            revert NotOwner();
+        }
         _;
     }
+
 }
