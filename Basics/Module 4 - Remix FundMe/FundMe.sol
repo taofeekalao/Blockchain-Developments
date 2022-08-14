@@ -21,25 +21,21 @@ contract FundMe {
         addressToAmountFunders[msg.sender] = msg.value;
     }
 
-    // function getPrice() public view returns (uint256) {
-    //     // ABI
-    //     // Address https://rinkeby.etherscan.io/address/0x8A753747A1Fa494EC906cE90E9f37563A8AF630e
-    //     AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
-    //     (, int256 price, , , ) = priceFeed.latestRoundData();
-    //     return uint256(price * 1e10);
-    // }
+    function withdrawal() public {
+        for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
+            address funder = funders[funderIndex];
+            addressToAmountFunders[funder] = 0;
+        }
 
-    // function getVersion() public view returns (uint256) {
-    //     AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
-    //     return priceFeed.version();
-    // }
-
-    // function getConversionRate(uint256 ethAmount) public view returns (uint256) {
-    //     uint256 ethPrice = getPrice();
-    //     uint256 ethAmountInUSD = (ethPrice * ethAmount) / 1e18;
-    //     return ethAmountInUSD;
-    // }
-
-   // function withdrawal() public {}
+        // transfer
+        payable(msg.sender).transfer(address(this).balance);
+        // send
+        bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        require(sendSuccess, "Send failed!");
+        // call
+        (bool callSuccess, bytes memory dataReturned) = payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed!");
+        
+    }
 
 }
