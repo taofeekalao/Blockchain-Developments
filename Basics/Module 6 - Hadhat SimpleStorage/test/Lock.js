@@ -121,6 +121,10 @@ describe("Lock", function () {
           [lockedAmount, -lockedAmount]
         );
       });
+
+      it("", async function () {
+        const expectedValue = "7";
+      });
     });
   });
 });
