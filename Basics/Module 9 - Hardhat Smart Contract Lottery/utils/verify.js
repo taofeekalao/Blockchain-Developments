@@ -1,5 +1,7 @@
+// we can't have these functions in our `helper-hardhat-config`
+// since these use the hardhat library
+// and it would be a circular dependency
 const { run } = require("hardhat")
-const { modules } = require("web3")
 
 const verify = async (contractAddress, args) => {
     console.log("Verifying contract...")
@@ -17,4 +19,6 @@ const verify = async (contractAddress, args) => {
     }
 }
 
-module.exports = { verify }
+module.exports = {
+    verify,
+}
